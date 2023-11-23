@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "239664079474",
+    "firebase_url": "https://fir-esp32-demo-6968d-default-rtdb.firebaseio.com",
+    "project_id": "fir-esp32-demo-6968d",
+    "storage_bucket": "fir-esp32-demo-6968d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:239664079474:android:ffa34ca6496c413611d8eb",
+        "android_client_info": {
+          "package_name": "com.example.internet_of_the_things"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzxeWqKA5L2nVtwTJNWZe7vcVWBasmEaA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
