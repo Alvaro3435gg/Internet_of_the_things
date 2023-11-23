@@ -53,7 +53,7 @@ class MyHomePage extends StatelessWidget {
                   color: Colors.blue[100],
                   borderRadius: BorderRadius.circular(15.0),
                   border: Border.all(
-                    color: Colors.blue[900]!, // Cambié a un azul más fuerte.
+                    color: Colors.blue[900]!,
                     width: 2.0,
                   ),
                 ),
@@ -66,11 +66,11 @@ class MyHomePage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text('Placa'),
-                          SizedBox(height: 10.0),
-                          Image.network(
-                            'https://via.placeholder.com/50',
-                            width: 50.0,
-                            height: 50.0,
+                          SizedBox(height: 0.0),
+                          Image.asset(
+                            'assets/truck3.gif',
+                            width: 70.0,
+                            height: 70.0,
                             fit: BoxFit.cover,
                           ),
                         ],
