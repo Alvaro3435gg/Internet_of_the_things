@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'dart:math';
 
 void main() {
@@ -28,7 +29,9 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
+  late List<AnimationController> shakeControllers;
+
   // Estados independientes para cada Switch y números en la segunda columna
   List<bool> switchValues = List.generate(7, (index) => false);
   List<String> frutas = ["Manzana", "Plátano", "Uva", "Naranja", "Fresa", "Kiwi", "Pera"];
@@ -39,15 +42,37 @@ class _MyHomePageState extends State<MyHomePage> {
   List<String> placasGeneradas = [];
 
   @override
+  void initState() {
+    super.initState();
+    shakeControllers = List.generate(
+      7,
+          (index) => AnimationController(
+        vsync: this,
+        duration: Duration(milliseconds: 100),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    for (var controller in shakeControllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
           'Gestor de Refrigeración',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20.0,
-            color: Colors.white,
+          style: GoogleFonts.roboto(
+            textStyle: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20.0,
+              color: Colors.white,
+            ),
           ),
         ),
         centerTitle: true,
@@ -82,82 +107,119 @@ class _MyHomePageState extends State<MyHomePage> {
                   placasGeneradas.add(placa);
                 }
 
-                return Container(
-                  margin: EdgeInsets.symmetric(
-                      vertical: 10.0, horizontal: MediaQuery.of(context).size.width * 0.05),
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  height: MediaQuery.of(context).size.height * 0.2,
-                  decoration: BoxDecoration(
-                    color: containerColor,
-                    borderRadius: BorderRadius.circular(15.0),
-                    border: Border.all(
-                      color: borderColor,
-                      width: 2.0,
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      // Primera Columna
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                // Verificar si el contenedor tiene fondo naranja y activar la animación de vibración
+                if (containerColor == Colors.orange[300]) {
+                  if (!shakeControllers[index].isAnimating) {
+                    shakeControllers[index].repeat(reverse: true);
+                  }
+                } else {
+                  shakeControllers[index].reset();
+                }
+
+                return AnimatedBuilder(
+                  animation: shakeControllers[index],
+                  builder: (context, child) {
+                    return Transform.translate(
+                      offset: Offset(shakeControllers[index].value * 5, 0),
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                          vertical: 10.0,
+                          horizontal: MediaQuery.of(context).size.width * 0.05,
+                        ),
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        height: MediaQuery.of(context).size.height * 0.2,
+                        decoration: BoxDecoration(
+                          color: containerColor,
+                          borderRadius: BorderRadius.circular(15.0),
+                          border: Border.all(
+                            color: borderColor,
+                            width: 2.0,
+                          ),
+                        ),
+                        child: Row(
                           children: [
-                            Text(
-                              placa, // Utilizar la placa generada
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
+                            // Primera Columna
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    placa, // Utilizar la placa generada
+                                    style: GoogleFonts.roboto(
+                                      textStyle: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 0.0),
+                                  Image.asset(
+                                    'assets/truck3.gif',
+                                    width: 70.0,
+                                    height: 70.0,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ],
                               ),
                             ),
-                            SizedBox(height: 0.0),
-                            Image.asset(
-                              'assets/truck3.gif',
-                              width: 70.0,
-                              height: 70.0,
-                              fit: BoxFit.cover,
-                            ),
-                          ],
-                        ),
-                      ),
-                      // Segunda Columna
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              frutas[index],
-                              style: TextStyle(
-                                fontSize: 18.0,
+                            // Segunda Columna
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    frutas[index],
+                                    style: GoogleFonts.roboto(
+                                      textStyle: TextStyle(
+                                        fontSize: 18.0,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 10.0),
+                                  Text(
+                                    'Temp-Amb: ${tempAmb[index]}',
+                                    style: GoogleFonts.roboto(
+                                      textStyle: TextStyle(
+                                        fontSize: 16.0,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 10.0),
+                                  Text(
+                                    'Temp-Ide: ${tempIde[index]}',
+                                    style: GoogleFonts.roboto(
+                                      textStyle: TextStyle(
+                                        fontSize: 16.0,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            SizedBox(height: 10.0),
-                            Text('Temp-Fruta: ${tempAmb[index]}'),
-                            SizedBox(height: 10.0),
-                            Text('Temp-Ide: ${tempIde[index]}'),
-                          ],
-                        ),
-                      ),
-                      // Tercera Columna
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Switch(
-                              value: switchValues[index],
-                              onChanged: (bool value) {
-                                setState(() {
-                                  switchValues[index] = value;
-                                });
-                              },
+                            // Tercera Columna
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Switch(
+                                    value: switchValues[index],
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        switchValues[index] = value;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 );
               },
             ),
