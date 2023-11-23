@@ -27,8 +27,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // Un estado para cada Switch
+  // Estados independientes para cada Switch y números en la segunda columna
   List<bool> switchValues = List.generate(7, (index) => false);
+  List<String> frutas = ["Manzana", "Plátano", "Uva", "Naranja", "Fresa", "Kiwi", "Pera"];
+  List<int> tempAmb = [25, 40, 23, 35, 26, 24, 42];
+  List<int> tempIde = [30, 32, 29, 31, 28, 27, 30];
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text('Placa'),
+                          Text(frutas[index]), // Cambiado el texto a nombres de frutas
                           SizedBox(height: 0.0),
                           Image.asset(
                             'assets/truck3.gif',
@@ -90,11 +93,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text('Fruta'),
+                          Text('Temp-Fruta: ${tempAmb[index]}'), // Cambiado el texto y agregado números
                           SizedBox(height: 10.0),
-                          Text('Temp-Ide'),
-                          SizedBox(height: 10.0),
-                          Text('Temp-Amb'),
+                          Text('Temp-Ide: ${tempIde[index]}'), // Cambiado el texto y agregado números
                         ],
                       ),
                     ),
