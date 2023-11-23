@@ -19,8 +19,16 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  // Un estado para cada Switch
+  List<bool> switchValues = List.generate(7, (index) => false);
 
   @override
   Widget build(BuildContext context) {
@@ -96,11 +104,13 @@ class MyHomePage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Image.network(
-                            'https://via.placeholder.com/80',
-                            width: 80.0,
-                            height: 80.0,
-                            fit: BoxFit.cover,
+                          Switch(
+                            value: switchValues[index],
+                            onChanged: (bool value) {
+                              setState(() {
+                                switchValues[index] = value;
+                              });
+                            },
                           ),
                         ],
                       ),
