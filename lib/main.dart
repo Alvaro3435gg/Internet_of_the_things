@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:math';
 import 'firebase_options.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 Future<void> main() async{
@@ -40,9 +41,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   late List<AnimationController> shakeControllers;
 
+
+
   // Estados independientes para cada Switch y números en la segunda columna
-  List<bool> switchValues = List.generate(7, (index) => false);
-  List<String> frutas = ["Manzana", "Plátano", "Uva", "Naranja", "Fresa", "Kiwi", "Pera"];
+  List<bool> switchValues = List.generate(5, (index) => false);
+  List<String> frutas = List.generate(5, (index) => "Fruta temporal");
   List<int> tempAmb = [25, 40, 23, 35, 26, 24, 42];
   List<int> tempIde = [30, 32, 29, 31, 28, 27, 30];
 
@@ -53,13 +56,25 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     shakeControllers = List.generate(
-      7,
+      5,
           (index) => AnimationController(
         vsync: this,
         duration: Duration(milliseconds: 100),
       ),
     );
+    loadFrutasFromDatabase();
   }
+  // Función para cargar frutas desde la base de datos
+  void loadFrutasFromDatabase() async {
+    final QuerySnapshot querySnapshot =
+    await FirebaseFirestore.instance.collection('Frutas').get();
+
+    setState(() {
+      frutas = querySnapshot.docs.map((doc) => doc['nombre'] as String).toList();
+      frutas.length = 5;
+    });
+  }
+
 
   @override
   void dispose() {
@@ -93,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: List.generate(
-              7,
+              5,
                   (index) {
                 // Condición para cambiar el color del contenedor
                 Color containerColor =
@@ -164,8 +179,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                   SizedBox(height: 0.0),
                                   Image.asset(
                                     'assets/truck3.gif',
-                                    width: 70.0,
-                                    height: 70.0,
+                                    width: 100.0,
+                                    height: 100.0,
                                     fit: BoxFit.cover,
                                   ),
                                 ],
